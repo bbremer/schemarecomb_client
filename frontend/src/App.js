@@ -20,9 +20,7 @@ class App extends Component {
     };
   };
 
-  handleNumChange = numID => {
-    return event => this.setState({[numID]: event.target.value})
-  };
+  handleBlockChange = event => this.setState({numBlocks: event.target.value})
 
   getFileText = async file => {
     return new Promise((resolve,  reject) => {
@@ -46,27 +44,22 @@ class App extends Component {
         parentsPromise.catch(error => {this.setState({errorMsg: 'Add a parents file.'})}),
         pdbPromise.catch(error => {this.setState({errorMsg: 'Add a pdb file.'})}),
     ]);
-    let numParents = this.state.numParents;
     let numBlocks = this.state.numBlocks;
 
     // placeholders for http call
     console.log("Sending these things:");
     console.log(parentsText);
     console.log(pdbText);
-    console.log(numParents);
     console.log(numBlocks);
 
-    let run_params = {parentsText, pdbText, numParents, numBlocks};
+    let run_params = {parentsText, pdbText, numBlocks};
     console.log(run_params);
 
-    // TODO: Uncomment when backend can accept requests.
-    /*
-    axios.post("<BACKEND URL>", run_params)
+    axios.post("https://zuog7xflce.execute-api.us-east-1.amazonaws.com/api", run_params)
       .then(response => {
         console.log(response);
         console.log(response.data);
       });
-    */
   };
 
   render() {
@@ -84,13 +77,8 @@ class App extends Component {
         </div>
 
         <div>
-          <h3> Number of parents: </h3>
-          <input id="numParents" type="number" value={this.state.numParents} onChange={this.handleNumChange("numParents")} min="2" max="6"/>
-        </div>
-
-        <div>
           <h3> Number of blocks: </h3>
-          <input id="numBlocks" type="number" value={this.state.numBlocks} onChange={this.handleNumChange("numBlocks")} min="2" max="8"/>
+          <input id="numBlocks" type="number" value={this.state.numBlocks} onChange={this.handleBlockChange} min="2" max="8"/>
         </div>
 
         <button onClick={this.onRunStart}>
